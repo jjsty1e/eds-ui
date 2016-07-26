@@ -1,15 +1,17 @@
 
 var edsUI = {
     toast : function(msg,callback1){
+        var timestamp=new Date().getTime();
         $("body").append(edsUI.template.toast);
-        var divToast = $(".jakes-notice");
-        divToast.html(msg);
-        divToast.animate({
-            'top' : 20
+        var _toastModal = $(".jakes-notice");
+        _toastModal.html(msg);
+        _toastModal.attr('data-id',timestamp);
+        _toastModal.animate({
+            'top' : 100
         },500,function(){
             setTimeout(function(){
-                divToast.fadeOut(500);
-               edsUI.close();
+                _toastModal.fadeOut(500);
+                edsUI.close(timestamp);
             },500)
         });
         //1秒之后执行回调函数,以防止动画被阻断
@@ -20,57 +22,122 @@ var edsUI = {
         }
     },
 
-    confirm : function(header,msg,btnArray,btn1Call,btn2Call){
+    /**
+     *
+     * @param title
+     * @param msg
+     * @param btnArray
+     * @param btn1Call
+     * @param btn2Call
+     */
+    confirm : function(title,msg,btnArray,btn1Call,btn2Call){
+        var timestamp=new Date().getTime();
         switch (arguments.length){
-            case 2 :
+            case 2 :                // (msg,btn1Call)
                 btn1Call = msg;
-                msg = header;
-                header = '提示';
+                msg = title;
+                title = '提示';
                 btnArray = ['确定','取消'];
                 break;
-            case 3 :
+            case 3 :               //(title,msg,btn1Call)
                 btn1Call = btnArray;
                 btnArray = ['确定','取消'];
                 break;
-            case 4 :
+            case 4 :               //(title,msg,btn1Call,btn2Call)
                 btn2Call = btn1Call;
                 btn1Call = btnArray;
                 btnArray = ['确定','取消'];
         }
 
-       $('body').append(this.template.confirm);
-        var jakes_confirm = $(".jakes-confirm");
+        $('body').append(this.template.confirm);
+        var _confirmModal = $(".jakes-confirm");
+        _confirmModal.attr('data-id',timestamp);
         var headerDiv = $('.jB-confirm-header');
-        headerDiv.html(header);
-        this._bingCloseIcon(headerDiv);
+        headerDiv.html(title);
+        headerDiv.prepend('<i class="fa fa-exclamation-circle">&nbsp;&nbsp;');
+        this._bingCloseIcon(headerDiv,timestamp);
         $(".jB-confirm-content").html(msg);
         var btn1 = $("div.jakes-confirm-buttons > button:nth-child(1)");
         var btn2 = $("div.jakes-confirm-buttons > button:nth-child(2)");
         btn1.html(btnArray[0]);
         btn2.html(btnArray[1]);
-        jakes_confirm.css('top',-250);
-        jakes_confirm.show();
-        jakes_confirm.animate({
-            top : 20
+        _confirmModal.css('top',-250);
+        _confirmModal.show();
+        _confirmModal.animate({
+            top : 100
         },500);
         btn1.click(function(){
-                if(btn1Call) {
-                    btn1Call();
-                }
+            if(btn1Call) {
+                btn1Call();
+            }
+            edsUI.close(timestamp);
             return true;
-            });
+        });
         btn2.click(function(){
-                if(btn2Call){
-                     btn2Call();
-                }
-                return false;
-            });
+            if(btn2Call){
+                btn2Call();
+            }
+            edsUI.close(timestamp);
+            return false;
+        });
 
+    },
 
+    /**
+     *  可选参数2-4个，不过建议还是使用完整的参数列表
+     * @param title
+     * @param btnArray
+     * @param btn1Call
+     * @param btn2Call
+     */
+    prompt: function (title,btnArray,btn1Call,btn2Call) {
+        var timestamp=new Date().getTime();
+        switch (arguments.length){
+            case 2 :                // (title,btn1Call)
+                btn1Call = btnArray;
+                btnArray = ['确定','取消'];
+                break;
+            case 3 :                //(title,btn1Call,btn2Call)
+                btn2Call = btn1Call;
+                btn1Call = btnArray;
+                btnArray = ['确定','取消'];
+                break;
+        }
+
+        $('body').append(this.template.prompt);
+        var _promptModal = $(".jakes-confirm");
+        _promptModal.attr('data-id',timestamp);
+        var headerDiv = $('.jB-confirm-header');
+        headerDiv.html(title);
+        headerDiv.prepend('<i class="fa fa-exclamation-circle">&nbsp;&nbsp;');
+        this._bingCloseIcon(headerDiv,timestamp);
+        var btn1 = $("div.jakes-confirm-buttons > button:nth-child(1)");
+        var btn2 = $("div.jakes-confirm-buttons > button:nth-child(2)");
+        btn1.html(btnArray[0]);
+        btn2.html(btnArray[1]);
+        _promptModal.css('top',-250);
+        _promptModal.show();
+        _promptModal.animate({
+            top : 100
+        },500);
+        btn1.click(function(e){
+            if(btn1Call) {
+                e.content = $('.jB-confirm-content input').val();
+                btn1Call(e);
+            }
+            edsUI.close(timestamp);
+        });
+        btn2.click(function(){
+            if(btn2Call){
+                btn2Call();
+            }
+            edsUI.close(timestamp);
+        });
 
     },
 
     alert : function(title,msg,callback1){
+        var timestamp=new Date().getTime();
         switch (arguments.length){
             case 1:
                 msg = title;
@@ -82,42 +149,98 @@ var edsUI = {
                 title = "提示";
         }
         $('body').append(this.template.alert);
-        var jakes_alert = $('.jakes-alert');
+        var _alertModal = $('.jakes-alert');
+        _alertModal.attr('data-id',timestamp);
         var header = $('.jakes-alert-header');
         var content = $('.jakes-alert-content');
         content.html(msg);
         header.html(title);
-        this._bingCloseIcon(header,callback1);
-        jakes_alert.css('top',-250);
-        jakes_alert.show();
-        jakes_alert.animate({
-            'top' : 20
+        header.prepend('<i class="fa fa-exclamation-circle">&nbsp;&nbsp;');
+        this._bingCloseIcon(header,timestamp);
+        _alertModal.css('top',-250);
+        _alertModal.show();
+        _alertModal.animate({
+            'top' : 100
         },500);
         $('div.jakes-alert-button > button').click(function(){
-            edsUI.close();
             if(callback1){
                 callback1();
             }
+            edsUI.close(timestamp);
         });
 
     },
 
-    mask : function() {
-        if($('.jakes-mask').length == 0)
-        {
-            var htmlMask = "<div class='jakes-mask'></div>";
-            $('body').append(htmlMask);
-            var divMask = $('.jakes-mask');
-            divMask.height($(document).height());
-            divMask.show();
-        }
-      return this;
+    form: function (formId,callback,loading) {
+        $(formId).submit(function () {
+            $.ajax({
+                url : $(formId).attr('action'),
+                type: $(formId).attr('method'),
+                data: $(formId).serialize(),
+                beforeSend : function () {
+                    if(loading) {
+                        window.eds = {};
+                        switch (loading[1]) {
+                            case 'text' :
+                                window.eds.loaddingHtml = $(loading[0]).html();
+                                $(loading[0]).html('正在提交...');
+                                $(loading[0]).addClass('disabled');
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                },
+                complete : function () {
+                    if(loading) {
+                        switch (loading[1]) {
+                            case 'text' :
+                                $(loading[0]).removeClass('disabled');
+                                $(loading[0]).html(window.eds.loaddingHtml);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                },
+                success : function (result) {
+                    if(callback) {
+                        callback(result);
+                    }
+                }
+            });
+            return false;
+        });
     },
 
-    _bingCloseIcon : function (node,callback1){
+
+    /**
+     *
+     * @returns {edsUI}
+     */
+    mask : function() {
+
+
+        var htmlMask = "<div class='jakes-mask'></div>";
+        $('body').append(htmlMask);
+        var divMask = $('.jakes-mask');
+        divMask.height($(document).height());
+        divMask.show();
+
+        return this;
+    },
+
+    _bingCloseIcon : function (node,callback1,eleId){
         node.append(this.template.closeIcon);
+        switch (arguments.length) {
+            case 2:
+                eleId = callback1;
+                callback1 = null;
+
+        }
+
         $(".jakes-close-icon").click(function(){
-            edsUI.close();
+            edsUI.close(eleId);
             if(callback1){
                 callback1();
             }
@@ -127,6 +250,7 @@ var edsUI = {
 
     template : {
         toast     : "<div class='jakes jakes-notice'></div>",
+
         confirm   : '<div class="jakes jakes-confirm">'+
         '<div class="jB-confirm-header">'+
 
@@ -139,16 +263,39 @@ var edsUI = {
         '<button>按钮2</button>'+
         '</div>'+
         '</div>',
+
+        prompt:'<div class="jakes jakes-confirm">'+
+        '<div class="jB-confirm-header">'+
+
+        '</div>'+
+        '<div class="jB-confirm-content">'+
+        '<input type="text" class="form-control">'+
+        '</div>'+
+        '<div class="jakes-confirm-buttons">'+
+        ' <button>按钮1</button>'+
+        '<button>按钮2</button>'+
+        '</div>'+
+        '</div>',
+
         closeIcon :'<i class="jakes-close-icon"></i>',
+
         alert     : '<div class="jakes jakes-alert">'+
         ' <div class="jakes-alert-header">警告</div>'+
         ' <div class="jakes-alert-content">不能删除该内容</div>'+
         '  <div class="jakes-alert-button"><button>确定</button></div>'+
         ' </div>'
+
     },
-    close : function(){
-      $(".jakes").remove();
-        if($(".jakes-mask").length > 0)
-            $(".jakes-mask").remove();
+    close : function(eleId){
+        eleId = eleId || '';
+        if($(".jakes[data-id='"+eleId+"']")) {
+            $(".jakes[data-id='"+eleId+"']").remove();
+            if($(".jakes-mask").length > 0)
+                $(".jakes-mask").remove();
+        } else {
+            $(".jakes").remove();
+            if($(".jakes-mask").length > 0)
+                $(".jakes-mask").remove();
+        }
     }
 };
