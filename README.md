@@ -24,6 +24,12 @@ edsUI.confirm("标题","提示的内容",['确定','取消'],function(){
 
 edsUI.mask().confirm("提示");
 
+##prompt
 
------------------------------------------------------------ @author Jake.
+prompt: function (title,btnArray,btn1Call,btn2Call)
+
+##form 异步表单提交
+
+ form: function (formId,callback,loading)
+
 
