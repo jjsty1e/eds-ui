@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="../src/themes/default/style.css">
+</head>
+<body>
+
+
+<button id="toast">toast</button>
+<button id="alert">alert</button>
+<button id="confirm">confirm</button>
+<button id="prompt">prompt</button>
+
+<script src="../lib/jquery.min.js"></script>
+<script src="../src/edsUI.js"></script>
+
+<script>
+    $('#toast').click(function(){
+        edsUI.toast('您好，我会自动消失');
+    });
+
+    $('#alert').click(function(){
+        edsUI.mask().alert('您好，我是一个提示框',function(){
+            edsUI.toast('你点击了确定');
+        });
+    });
+
+    $('#confirm').click(function(){
+        edsUI.mask().confirm('确定需要执行该操作吗？',function(){
+            edsUI.toast('你确定了该操作');
+        });
+    });
+
+
+    $('#prompt').click(function(){
+
+        edsUI.prompt('请输入价格',function(e) {
+            edsUI.mask().alert('您输入的价格是' + e.content);
+        });
+    });
+
+
+</script>
+</body>
+</html>
