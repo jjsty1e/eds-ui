@@ -11,8 +11,8 @@
 
 ### mask
 
-edsUI.mask() 会生成一个遮罩，是一个中间件，用于突出模态框和屏蔽网页上面的其他操作，建议配合alert、confirm等一起使用。
-可以手动使用edsUI.close()关闭
+`edsUI.mask()` 会生成一个遮罩，是一个中间件，用于突出模态框和屏蔽网页上面的其他操作，建议配合alert、confirm等一起使用。
+可以手动使用`edsUI.close()`关闭
 
 
 ### toast
@@ -50,7 +50,7 @@ edsUI.confirm("标题","提示的内容",['确定','取消'],function(){
 });
 ```
 
-`edsUI.mask().confirm("提示");``
+`edsUI.mask().confirm("提示");`
 
 
 //这是一个可变参数的函数，下面是一个只有两个参数但是使用次数比较多的例子：
@@ -63,9 +63,9 @@ edsUI.confirm('提示内容',function(){
 
 ### prompt
 
-输入框 ，使用e.content获得输入内容 
+输入框 ，使用`e.content`获得输入内容
 
-原型： prompt: function (title,btnArray,btn1Call,btn2Call)
+原型： `prompt: function (title,btnArray,btn1Call,btn2Call)`
 
 简单实例：
 
@@ -82,7 +82,7 @@ edsUI.prompt('请输入价格',function(e){
 
 使form表单变成异步提交。
 
-form: function (formId,callback,loading)
+form: `function (formId,callback,loading)`
 
 简单实例： 
 
