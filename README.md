@@ -107,6 +107,14 @@ edsUI.form('#form',function(result){
 
 上面的代码会自动提交id为 form的表单，并且在提交的过程中使#submit中的文字变成'正在提交...'
 
+### post提交a标签
+
+有时候我们页面上面有个a标签或者一个button，会触发一个ajax事件，需要自己去写一个$.post()或者$.ajax()方法。现在只需要在a标签中添加一个data-edsPost属性 ，edsUI就能帮你提交你需要的数据了
+
+	<a data-edsPost href="http://127.0.0.1:8000/order/approval/23">审核通过</a>
+
+当点击上面的a标签的时候，edsUI会自动帮你提交一个post请求到href指定的地址。
+
 ### Why this name ?
 
 因为当时这个组件是用于我前（前？）公司的一个项目，叫`E都市`,拼音缩写就是eds，所以一直沿用到现在。

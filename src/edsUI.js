@@ -1,5 +1,11 @@
 
 var edsUI = {
+
+    /**
+     * 自动消失弹出层
+     * @param msg
+     * @param callback1
+     */
     toast : function(msg,callback1){
         var timestamp=new Date().getTime();
         $("body").append(edsUI.template.toast);
@@ -23,7 +29,7 @@ var edsUI = {
     },
 
     /**
-     *
+     * 确认框
      * @param title
      * @param msg
      * @param btnArray
@@ -136,6 +142,12 @@ var edsUI = {
 
     },
 
+    /**
+     * 警告框
+     * @param title
+     * @param msg
+     * @param callback1
+     */
     alert : function(title,msg,callback1){
         var timestamp=new Date().getTime();
         switch (arguments.length){
@@ -157,11 +169,23 @@ var edsUI = {
         header.html(title);
         header.prepend('<i class="fa fa-exclamation-circle">&nbsp;&nbsp;');
         this._bingCloseIcon(header,timestamp);
+
         _alertModal.css('top',-250);
-        _alertModal.show();
+
+        if($(window).width() < 1000) {
+            var top = $(window).height()/2-_alertModal.height();
+        } else {
+            top = 100
+        }
+
         _alertModal.animate({
-            'top' : 100
+            'top' : top
         },500);
+
+
+        _alertModal.css('margin-left',-_alertModal.width()/2);
+        _alertModal.show();
+
         $('div.jakes-alert-button > button').click(function(){
             if(callback1){
                 callback1();
@@ -171,6 +195,12 @@ var edsUI = {
 
     },
 
+    /**
+     * 异步表单提交
+     * @param formId
+     * @param callback
+     * @param loading
+     */
     form: function (formId,callback,loading) {
         $(formId).submit(function () {
             $.ajax({
@@ -213,9 +243,8 @@ var edsUI = {
         });
     },
 
-
     /**
-     *
+     * 遮罩层
      * @returns {edsUI}
      */
     mask : function() {
@@ -230,6 +259,14 @@ var edsUI = {
         return this;
     },
 
+    /**
+     * 绑定关闭弹出层角标
+     * @access private
+     * @param node
+     * @param callback1
+     * @param eleId
+     * @private
+     */
     _bingCloseIcon : function (node,callback1,eleId){
         node.append(this.template.closeIcon);
         switch (arguments.length) {
@@ -247,7 +284,9 @@ var edsUI = {
         });
     },
 
-
+    /**
+     * @access 模板集
+     */
     template : {
         toast     : "<div class='jakes jakes-notice'></div>",
 
@@ -286,6 +325,11 @@ var edsUI = {
         ' </div>'
 
     },
+
+    /**
+     * 关闭模态框
+     * @param eleId
+     */
     close : function(eleId){
         eleId = eleId || '';
         if($(".jakes[data-id='"+eleId+"']")) {
@@ -299,3 +343,38 @@ var edsUI = {
         }
     }
 };
+
+(function () {
+    $(function () {
+        $('a[data-edsPost]').click(function (e) {
+            e.preventDefault();
+            var me = $(this);
+            if(typeof window.eds == 'undefined')
+                window.eds = {};
+            window.eds.me = me;
+            var _html = me.html();
+            me.html('正在提交...');
+            if($(this).hasClass('btn-danger')) {
+                edsUI.mask().confirm('您真的要执行此操作吗，操作将不可',function () {
+                    doClick(window.eds.me);
+                });
+            } else {
+                doClick(me);
+            }
+
+            function doClick(me) {
+                $.post(me.attr('href'),{},function (result) {
+                    if(result.status) {
+                        edsUI.mask().alert(result.message,function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        edsUI.mask().alert(result.message);
+                        me.html(_html);
+                    }
+                });
+            }
+
+        });
+    })
+}());
