@@ -18,7 +18,7 @@
 ### toast
 会生成一个自动消失的提示信息，一般用于作用不是很大的提示信息。
 
-```
+```javascript
 edsUI.toast("提示");        //没有遮罩
 edsUI.mask().toast("提示")  //带遮罩
 ```
@@ -28,7 +28,7 @@ edsUI.mask().toast("提示")  //带遮罩
 
 提示框，一般输出警告信息，错误信息。
 
-```
+```javascript
 edsUI.alert("提示");
 edsUI.mask().alert("提示");
 
@@ -42,7 +42,7 @@ edsUI.mask().alert('提示',function(){
 
 确认框，一些关键操作可以用confirm提到警示作用。
 
-```
+```javascript
 edsUI.confirm("标题","提示的内容",['确定','取消'],function(){
    //第一个按钮的回调
 },function(){
@@ -55,7 +55,7 @@ edsUI.confirm("标题","提示的内容",['确定','取消'],function(){
 
 //这是一个可变参数的函数，下面是一个只有两个参数但是使用次数比较多的例子：
 
-```
+```javascript
 edsUI.confirm('提示内容',function(){
     //点击确定按钮的回调函数
 })
@@ -69,7 +69,7 @@ edsUI.confirm('提示内容',function(){
 
 简单实例：
 
-```
+```javascript
 edsUI.prompt('请输入价格',function(e){
   edsUI.mask().alert('您输入的价格是' + e.content);
 });
@@ -87,7 +87,7 @@ form: `function (formId,callback,loading)`
 简单实例： 
 
 
-```
+```javascript
 edsUI.form('#form',function(result){
    console.log('服务器返回的内容是' + result);
    
