@@ -75,8 +75,18 @@ edsUI.prompt('请输入价格',function(e){
 });
 ```
 
+### html 自动以模态框内容
 
+自定义模态框区域内容
 
+原型：` html : function (title,htmlContent) {`
+
+简单实例：
+
+```javascript
+edsUI.mask.html('自定义html',"<div class='content'>" +
+ "<h1>你好</h1></div>");
+```
 
 ### form 异步表单提交
 

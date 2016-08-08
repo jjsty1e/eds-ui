@@ -148,7 +148,8 @@ var edsUI = {
      * @param msg
      * @param callback1
      */
-    alert : function(title,msg,callback1){
+    alert : function(title,msg,callback1)
+    {
         var timestamp=new Date().getTime();
         switch (arguments.length){
             case 1:
@@ -193,6 +194,43 @@ var edsUI = {
             edsUI.close(timestamp);
         });
 
+    },
+
+    /**
+     * 自定义html内容
+     * @param title
+     * @param htmlContent
+     */
+    html : function (title,htmlContent) {
+        
+        var timestamp=new Date().getTime();
+        $('body').append(this.template.html);
+        var _htmlModal = $('.jakes-html');
+        _htmlModal.attr('data-id',timestamp);
+        var header = $('.jakes-html-header');
+        var content = $('.jakes-html-content');
+        
+        header.html(title);
+        content.html(htmlContent);
+        
+        header.prepend('<i class="fa fa-exclamation-circle">&nbsp;&nbsp;');
+        this._bingCloseIcon(header,timestamp);
+
+        _htmlModal.css('top',-250);
+
+        if($(window).width() < 1000) {
+            var top = $(window).height()/2-_htmlModal.height();
+        } else {
+            top = 100
+        }
+
+        _htmlModal.animate({
+            'top' : top
+        },500);
+
+
+        _htmlModal.css('margin-left',-_htmlModal.width()/2);
+        _htmlModal.show();
     },
 
     /**
@@ -322,7 +360,11 @@ var edsUI = {
         ' <div class="jakes-alert-header">警告</div>'+
         ' <div class="jakes-alert-content">不能删除该内容</div>'+
         '  <div class="jakes-alert-button"><button>确定</button></div>'+
-        ' </div>'
+        ' </div>',
+        html : '<div class="jakes jakes-html">' +
+        '<div class="jakes-header jakes-html-header">自定义html</div>' +
+        '<div class="jakes-content jakes-html-content"></div>' +
+        '</div>'
 
     },
 
