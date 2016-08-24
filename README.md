@@ -1,7 +1,7 @@
 # edsUI
 
 简单实用的web端js组件，包含常用弹出层模态框，异步form表单提交等等，更多功能等以后有时间开发。
-放心，edsUI会不断的BC，你可以放心的实用edsUI的新功能
+放心，edsUI会不断的BC和develop，你可以放心的使用edsUI的新功能
 
 
 
@@ -75,7 +75,7 @@ edsUI.prompt('请输入价格',function(e){
 });
 ```
 
-### html 自动以模态框内容
+### html 自定义模态框内容
 
 自定义模态框区域内容
 
@@ -115,7 +115,7 @@ edsUI.form('#form',function(result){
 ```
 
 
-上面的代码会自动提交id为 form的表单，并且在提交的过程中使#submit中的文字变成'正在提交...'
+上面的代码会自动提交选择器为#form的表单，并且在提交的过程中使#submit中的文字变成'正在提交...'
 
 ### post提交a标签
 
