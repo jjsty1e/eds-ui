@@ -219,7 +219,10 @@ var edsUI = {
      * @param htmlContent
      */
     html: function (title, htmlContent) {
-
+        if (arguments.length <2) {
+            alert('请指定两个参数到html()函数');
+            return;
+        }
         var timestamp = new Date().getTime();
         $('body').append(this.template.html);
         var _htmlModal = $('.jakes-html');
@@ -488,7 +491,7 @@ var edsUI = {
          */
         getFragment: function (url) {
             if (!url) {
-                url = window.location.href;
+               url = window.location.href;
             }
             var reg = new RegExp("#[^&?#]*");
             var res = url.match(reg);
