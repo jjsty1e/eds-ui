@@ -84,7 +84,7 @@ edsUI.prompt('请输入价格',function(e){
 简单实例：
 
 ```javascript
-edsUI.mask.html('自定义html',"<div class='content'>" +
+edsUI.mask标题标题().html('标题',"<div class='content'>" +
  "<h1>你好</h1></div>");
 ```
 
