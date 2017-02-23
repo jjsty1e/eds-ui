@@ -196,7 +196,7 @@ var edsUI = {
         _alertModal.css('margin-left', -_alertModal.width() / 2);
         _alertModal.show();
 
-        $('*').blur()
+        $('*').blur();
         $(document).keydown(function (e) {
             if(e.keyCode == 13) {
                 $('div.jakes-alert-button > button').trigger('click');
@@ -217,12 +217,10 @@ var edsUI = {
      * 自定义html内容
      * @param title
      * @param htmlContent
+     * @param closeCallback 点击关闭角标的回调
      */
-    html: function (title, htmlContent) {
-        if (arguments.length <2) {
-            alert('请指定两个参数到html()函数');
-            return;
-        }
+    html: function (title, htmlContent, closeCallback) {
+
         var timestamp = new Date().getTime();
         $('body').append(this.template.html);
         var _htmlModal = $('.jakes-html');
@@ -234,7 +232,7 @@ var edsUI = {
         content.html(htmlContent);
 
         header.prepend('<i class="fa fa-exclamation-circle">&nbsp;&nbsp;');
-        this._bingCloseIcon(header, timestamp);
+        this._bingCloseIcon(header, closeCallback, timestamp);
 
         _htmlModal.css('top', -250);
 
@@ -254,13 +252,33 @@ var edsUI = {
     },
 
     /**
+     * 简易模板渲染
+     *
+     * 使用占位符 @@, 例如 @variable_name@ 代表渲染变量variable_name
+     *
+     * @param template string
+     * @param parameters object
+     */
+    parse: function (template, parameters) {
+        for (var key in parameters) {
+            if (parameters.hasOwnProperty(key)) {
+                var reg = new RegExp('@'+key+'@', 'g');
+                template = template.replace(reg, parameters[key]);
+            }
+        }
+
+        return $(template);
+    },
+
+    /**
      * 异步表单提交
      * @param formId
      * @param callback
      * @param loading
      */
     form: function (formId, callback, loading) {
-        $(formId).submit(function () {
+
+        $(document).on('submit',formId,function () {
             $.ajax({
                 url: $(formId).attr('action'),
                 type: $(formId).attr('method'),
@@ -309,7 +327,7 @@ var edsUI = {
                         callback(result);
                     }
                 }
-            }).error(function (event, xhr, options, exc) {
+            }).error(function (event) {
                 var response = JSON.parse(event.responseText);
                 if (typeof response.message != 'undefined') {
                     edsUI.mask().alert(response.message);
@@ -421,19 +439,13 @@ var edsUI = {
      * @param eleId
      */
     close: function (eleId) {
-
-
         var mask = $(".jakes-mask");
         var modal = $(".jakes[data-id='" + eleId + "']");
-
-
 
         if(eleId && modal.length > 0) {
             modal.remove();
         } else {
             $(".jakes").remove();
-
-
         }
 
         mask.length > 0 && mask.remove();
@@ -446,17 +458,6 @@ var edsUI = {
          * 这个变量应该设置为私有，
          */
         href: '',
-
-        /**
-         * 返回href
-         * @returns {string}
-         */
-        getHref: function () {
-            if (this.href.length == 0) {
-                this.href = window.location.href;
-            }
-            return this.href;
-        },
 
         /**
          * 页面跳转
@@ -487,30 +488,14 @@ var edsUI = {
         },
 
         /**
-         * 获取fragment
-         */
-        getFragment: function (url) {
-            if (!url) {
-               url = window.location.href;
-            }
-            var reg = new RegExp("#[^&?#]*");
-            var res = url.match(reg);
-            if (res && res.length > 0) {
-                return res[0].substr(1);
-            }
-            return false;
-        },
-
-        /**
          * 设置路由参数
          *
          * @param name
          * @param value
-         * @param force
          */
-        setParameter: function (name, value,force) {
+        setParameter: function (name, value) {
 
-            if (this.getParameter(name)) {
+            if (this.hasParameter(name)) {
                 this.removeParameter(name);
             }
 
@@ -519,7 +504,7 @@ var edsUI = {
             } else {
                 this.href += '?' + name + '=' + value;
             }
-            console.log(this.href);
+
             return this;
         },
 
@@ -554,12 +539,21 @@ var edsUI = {
          */
         getParameter: function (name) {
             var parameters = this.getParameters();
-            if(parameters.hasOwnProperty(name)) {
+            if (parameters.hasOwnProperty(name)) {
                 return parameters[name];
             } else {
                 console.info('location has no parameter named ' + name);
                 return '';
             }
+        },
+
+        /**
+         * 检查url中是否存在某个参数
+         *
+         * @param name
+         */
+        hasParameter: function (name) {
+            return this.getParameters().hasOwnProperty(name);
         },
 
         /**
@@ -586,7 +580,7 @@ var edsUI = {
          */
         getParameters: function (href) {
             if (!href) {
-                href = window.location.href;
+               href = window.location.href;
             }
             var start = href.indexOf('?');
             if (start !== -1) {
@@ -610,52 +604,55 @@ var edsUI = {
 };
 
 (function () {
-    $(function () {
-        $('a[data-edsPost]').click(function (e) {
-            e.preventDefault();
-            var me = $(this);
-            var meta = me.attr('data-edsPost');
-            if(typeof window.eds == 'undefined')
-                window.eds = {};
-            window.eds.me = me;
-            var _html = me.html();
-            me.html('正在提交...');
-            if($(this).hasClass('btn-danger') || $(this).hasClass('confirm')) {
-                edsUI.mask().confirm('警告','您真的要执行此操作吗，操作将不可撤销',function () {
-                    doClick(window.eds.me, meta);
-                },function () {
-                    me.html(_html);
-                });
-            } else {
-                doClick(me, meta);
-            }
+   $(function () {
+       $('a[data-edsPost]').click(function (e) {
+           e.preventDefault();
+           var me = $(this);
+           var meta = me.attr('data-edsPost');
+           if(typeof window.eds == 'undefined')
+               window.eds = {};
+           window.eds.me = me;
+           var _html = me.html();
+           me.html('正在提交...');
+           if($(this).hasClass('btn-danger') || $(this).hasClass('confirm')) {
+               edsUI.mask().confirm('警告','您真的要执行此操作吗，操作将不可撤销',function () {
+                   doClick(window.eds.me, meta);
+               },function () {
+                   me.html(_html);
+               });
+           } else {
+               doClick(me, meta);
+           }
 
-            function doClick(me, meta) {
-                $.post(me.attr('href'),{},function (result) {
-                    if(result.status) {
-                        if (meta.indexOf('toast') != -1) {
-                            edsUI.toast(result.message);
-                        } else {
-                            edsUI.mask().alert(result.message,function () {
-                                window.location.reload();
-                            });
-                        }
-                        me.html(_html);
-                    } else {
-                        edsUI.mask().alert(result.message);
-                        me.html(_html);
-                    }
-                }).error(function (event, xhr, options, exc) {
-                    var response = JSON.parse(event.responseText);
-                    if ( typeof response.message != 'undefined') {
-                        edsUI.mask().alert(response.message);
-                    } else {
-                        console.log(event.responseText);
-                    }
-                    me.html(_html);
-                });
-            }
+           function doClick(me, meta) {
+               $.post(me.attr('href'),{},function (result) {
+                   if(result.status) {
+                       if (meta.indexOf('toast') != -1) {
+                          edsUI.toast(result.message);
+                       } else {
+                           edsUI.mask().alert(result.message,function () {
+                               window.location.reload();
+                           });
+                       }
+                       me.html(_html);
+                   } else {
+                       edsUI.mask().alert(result.message);
+                       me.html(_html);
+                   }
+               }).error(function (event) {
+                   var response = JSON.parse(event.responseText);
+                   if ( typeof response.message != 'undefined') {
+                       edsUI.mask().alert(response.message);
+                   } else {
+                       console.log(event.responseText);
+                   }
+                   me.html(_html);
+               });
+           }
 
-        });
-    })
+       });
+       $(document).on('click','.edsUI-close', function (e) {
+           edsUI.close($(e.toElement).closest('jakes').attr('data-id'));
+       })
+   })
 }());

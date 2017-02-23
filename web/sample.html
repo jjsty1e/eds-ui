@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>edsUI示例</title>
+    <link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="library/edsUI/themes/default/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>edsUI示例</h1>
+        <button class="btn btn-info btn-sm" id="toast">自动消失层</button>
+        <button class="btn btn-info btn-sm" id="alert">警告框</button>
+        <button class="btn btn-info btn-sm" id="confirm">确认框</button>
+        <button class="btn btn-info btn-sm" id="prompt">输入弹出框</button>
+    </div>
+
+    <script src="vendor/jquery/dist/jquery.min.js"></script>
+    <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="library/edsUI/edsUI.js"></script>
+
+    <script>
+        var $container = $('.container');
+
+        $container.on('click', '#toast', function () {
+            edsUI.toast('您好，我会自动消失');
+        });
+
+        $container.on('click', '#alert', function () {
+            edsUI.mask().alert('您好，我是一个警告框',function(){
+                edsUI.toast('你点击了确定');
+            });
+        });
+
+        $container.on('click', '#confirm', function () {
+            edsUI.mask().confirm('确定需要执行该操作吗？',function(){
+                edsUI.toast('你确定了该操作');
+            });
+        });
+
+        $container.on('click', '#prompt', function () {
+            edsUI.prompt('请输入',function(e) {
+                edsUI.mask().alert('您输入的内容是' + e.content);
+            });
+        });
+    </script>
+</body>
+</html>

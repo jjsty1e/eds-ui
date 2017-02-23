@@ -88,7 +88,7 @@ body{
 }
 
 @media (max-width: 1000px) {
-    .jakes-alert{
+    .jakes-alert, .jakes-confirm{
         width: 80%;
         margin: 0 auto;
         position: fixed;
@@ -129,7 +129,7 @@ body{
     border: 2px solid #3c8dbc;
     background: #fff;
     border-radius: 2px;
-    position: fixed;
+    position: absolute;
     top: 20px;
     left: 50%;
     margin-left: -250px;
@@ -147,7 +147,7 @@ body{
     right: 5px;
     top: 8px;
     cursor: pointer;
-    background: url("img/edsUI-close.png");
+    background: url("img/edsUI-close-grey.png");
     background-size: 100%;
 
     transition:All 0.4s ease-in-out;
