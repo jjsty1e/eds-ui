@@ -1,5 +1,5 @@
 {
-    "name": "edsUI",
+    "name": "eds-ui",
     "dependencies": {
         "bootstrap": "*"
     }
