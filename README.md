@@ -2,11 +2,11 @@
 
 简单实用的web端js组件，包含功能：
 
- - 弹出层模态框
- - 使用post方法请求链接
- - 异步form表单提交
+ - [弹出层模态框](https://github.com/Jaggle/eds-ui#遮罩层)
+ - [使用post方法请求链接](https://github.com/Jaggle/eds-ui#post提交a标签)
+ - [异步form表单提交](https://github.com/Jaggle/eds-ui#form-异步表单提交)
  - url处理
- - js模板引擎。
+ - [js模板引擎](https://github.com/Jaggle/eds-ui#模板引擎)
 
 ## 安装
 
