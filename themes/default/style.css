@@ -147,7 +147,7 @@ body{
     right: 5px;
     top: 8px;
     cursor: pointer;
-    background: url("img/edsUI-close-grey.png");
+    background: url("img/edsUI-close.png");
     background-size: 100%;
 
     transition:All 0.4s ease-in-out;
