@@ -134,6 +134,17 @@ body{
     margin-left: -250px;
     z-index: 1992;
 }
+
+@media screen and (max-width: 900px){
+    .jakes-html {
+        left: 0;
+        min-width: 100%;
+        width: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+}
+
 .jakes-html .jakes-html-content {
     padding: 10px;
 }

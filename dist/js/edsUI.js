@@ -322,7 +322,7 @@
         _htmlModal.css('top', -250);
 
         if ($(window).width() < 1000) {
-            var top = $(window).height() / 2 - _htmlModal.height();
+            var top = 100;
         } else {
             top = 100
         }
@@ -332,9 +332,9 @@
         }, 500);
 
 
-        _htmlModal.css('margin-left', -_htmlModal.width() / 2);
+       // _htmlModal.css('margin-left', -_htmlModal.width() / 2);
         _htmlModal.show();
-    }
+    };
 
     /**
      * 遮罩层
