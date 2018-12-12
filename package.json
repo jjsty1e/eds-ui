@@ -6,12 +6,18 @@
   "author": "Jaggle",
   "license": "MIT",
   "homepage": "https://github.com/Jaggle/eds-ui",
+  "repository": "https://github.com/Jaggle/eds-ui",
   "keywords": [
-      "frontend",
-      "javascript component"
+    "frontend",
+    "javascript component"
   ],
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-minify": "^0.0.15"
+    "gulp-minify": "^3.1.0"
+  },
+  "jshintConfig": {
+    "esversion": 6
+  },
+  "dependencies": {
+    "gulp": "^4.0.0"
   }
 }

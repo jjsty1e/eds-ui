@@ -1,31 +1,18 @@
-var gulp = require('gulp');
-var minify = require('gulp-minify');
- 
+let minify = require('gulp-minify');
+let gulp = require('gulp');
+
 gulp.task('js', function() {
-  gulp.src('edsUI.js')
-    .pipe(minify({
-        ext: {
-            min: '.min.js'
-        }
-    }))
-    .pipe(gulp.dest('dist/js'))
+    return gulp.src('src/js/*.js')
+        .pipe(minify({
+            ext: {
+                min: '.min.js'
+            },
+            noSource: true
+        }))
+        .pipe(gulp.dest('dist/js'));
 });
 
 gulp.task('css', function() {
-  gulp.src('edsUI.css')
-    .pipe(minify({
-        ext:{
-            min:'.min.css'
-        }
-    }))
-    .pipe(gulp.dest('dist/css'))
+  return gulp.src('src/css/**/*')
+    .pipe(gulp.dest('dist/css'));
 });
-
-
-gulp.task('img', function() {
-  gulp.src('images/*')
-    .pipe(minify({}))
-    .pipe(gulp.dest('dist/css/images'))
-});
-
-gulp.task('compress', ['js','css', 'img']);
