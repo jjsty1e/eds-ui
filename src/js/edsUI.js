@@ -45,16 +45,20 @@
      */
     edsUI.alert = function (title, msg, btnArray, btn1Call, btn2Call) {
         let timestamp = new Date().getTime();
+        let callback1 = null;
+
         switch (arguments.length) {
             case 1:
                 msg = title;
                 title = "提示";
                 break;
             case 2:
-                let callback1 = msg;
+                callback1 = msg;
                 msg = title;
                 title = "提示";
+                break;
         }
+
         $('body').append(this.template.alert);
         let _alertModal = $('.jakes-alert');
         _alertModal.attr('data-id', timestamp);
